@@ -6,8 +6,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import java.util.*
-import kotlin.random.Random
+import org.apache.commons.lang3.StringUtils
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,11 +15,11 @@ class MainActivity : AppCompatActivity() {
 
        startNewGame()
 
+
         //Listens to when button is pressed and executes wheel spinning
         val rollButton: Button = findViewById(R.id.button)
         rollButton.setOnClickListener {
             spinWheel()
-
 
         }
 
@@ -94,7 +93,6 @@ class MainActivity : AppCompatActivity() {
             2 -> { loseLife() }
             // 3 -> { GuessWord(100) }
 
-
         }
     }
 
@@ -140,6 +138,8 @@ class MainActivity : AppCompatActivity() {
             wordsOnScreen.text = underscoredWord
 
 
+            //Counts the number of occured letter correctly guessed.
+            countSubstringInstances(finalUnderscoreWord,text)
 
         }
 
@@ -167,6 +167,24 @@ class MainActivity : AppCompatActivity() {
     fun updateUI() {
         // TODO
     }
+
+
+        //uses external Apache Common library for function
+    fun countSubstringInstances(string: String, substringToCount: String) {
+
+
+        var count = StringUtils.countMatches(string,substringToCount).toString()
+        Toast.makeText(this, count + " correct letters", Toast.LENGTH_SHORT).show()
+
+        point = count.toInt()
+
+
+
+
+         Toast.makeText(this, point.toString(), Toast.LENGTH_SHORT).show()
+
+    }
+
 
 
 }
