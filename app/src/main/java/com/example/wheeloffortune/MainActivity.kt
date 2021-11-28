@@ -2,6 +2,7 @@ package com.example.wheeloffortune
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -28,10 +29,10 @@ class MainActivity : AppCompatActivity() {
 
 
     var life: Int = 5
+    var pointsOnLine = 1 //startingpoint is 1, otherwise multiplication of occurred words will be multiplied by 0. 1 is subsequently subtracted in the pointsOnStake function
     var point: Int = 0
-    var hiddenWord: String = "this is a test"
-    private lateinit var underscoredWord: String
-    private lateinit var wordToGuess: String
+    private lateinit var underscoredWord: String    //Words to be underscared with the help of generateUnderscores function
+    private lateinit var wordToGuess: String        //word to be randomly selected from text
 
 
 
@@ -43,8 +44,8 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        // picks a random word from GameWords list. generateUnderScores generates underscores of chosen word
-        wordToGuess = GameWords.words.random()
+        // picks a random word from GameWords list. generateUnderScores generates underscores of chosen word!!!! HUSK AT ÆNDRE TILBAGE TIL GameWOrds.words.random() og IKKE GameWords.testWords.random()
+        wordToGuess = GameWords.testWords.random()
 
         //generates underscoredWord <-
         generateUnderscores(wordToGuess)
@@ -85,13 +86,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun spinWheel() {
-        val wheel = NumberGenerator(2).roll()
+        val wheel = NumberGenerator(1).roll()
 
         when (wheel) {
 
             1 -> { gainLife() }
             2 -> { loseLife() }
-            // 3 -> { GuessWord(100) }
+            3 -> { pointsOnStake(100) }
+            3 -> { pointsOnStake(200) }
+            3 -> { pointsOnStake(500) }
+            3 -> { pointsOnStake(800) }
+            3 -> { pointsOnStake(1000) }
+            3 -> { pointsOnStake(1500) }
+            3 -> { pointsOnStake(2000) }
 
         }
     }
@@ -104,14 +111,11 @@ class MainActivity : AppCompatActivity() {
 
 
         letterSubmitButton.setOnClickListener {
-            val text = userInput.text.toString()
-            val letter = text[0]
 
-            if (wordToGuess.contains(text, true)) {
-                Toast.makeText(this, "works!", Toast.LENGTH_SHORT).show()
+            val letter = userInput.text.toString()[0]
 
 
-            }
+
 
 
             val indexes = mutableListOf<Int>()
@@ -138,8 +142,13 @@ class MainActivity : AppCompatActivity() {
             wordsOnScreen.text = underscoredWord
 
 
-            //Counts the number of occured letter correctly guessed.
-            countSubstringInstances(finalUnderscoreWord,text)
+
+
+            // adds occurrences of correctly guessed letters onto 'point'. Framework used is an external library called Apache Commons(StringUtils)
+            point += StringUtils.countMatches(finalUnderscoreWord,letter).toInt() * pointsOnLine
+            Toast.makeText(this, point.toString(), Toast.LENGTH_SHORT).show()
+
+
 
         }
 
@@ -169,21 +178,14 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-        //uses external Apache Common library for function
-    fun countSubstringInstances(string: String, substringToCount: String) {
 
+    fun pointsOnStake(currentPoints: Int) {
+         pointsOnLine += currentPoints - 1
 
-        var count = StringUtils.countMatches(string,substringToCount).toString()
-        Toast.makeText(this, count + " correct letters", Toast.LENGTH_SHORT).show()
-
-        point = count.toInt()
-
-
-
-
-         Toast.makeText(this, point.toString(), Toast.LENGTH_SHORT).show()
-
+       Toast.makeText(this, "this is on the line:$pointsOnLine", Toast.LENGTH_SHORT).show()
     }
+
+
 
 
 

@@ -228,4 +228,6 @@ object GameWords {
         "Zambia",
         "Zimbabwe"
     )
+
+    val testWords = listOf("This/Is/A/Test")
 }
