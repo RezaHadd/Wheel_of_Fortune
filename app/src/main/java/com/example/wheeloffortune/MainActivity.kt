@@ -14,14 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-
-
-
-
-        startNewGame()
-
-
+       startNewGame()
 
         //Listens to when button is pressed and executes wheel spinning
         val rollButton: Button = findViewById(R.id.button)
@@ -29,11 +22,7 @@ class MainActivity : AppCompatActivity() {
             spinWheel()
 
 
-
-
         }
-
-
 
     }
 
@@ -53,14 +42,15 @@ class MainActivity : AppCompatActivity() {
         healthOnScreen.text = life.toString()
         point = 0
 
-        //val wordToGuess = GameWords.words.random()
-        //generateUnderscores(wordToGuess)
+
 
         // picks a random word from GameWords list. generateUnderScores generates underscores of chosen word
         wordToGuess = GameWords.words.random()
 
-
+        //generates underscoredWord <-
         generateUnderscores(wordToGuess)
+
+
 
 
         val wordsOnScreen = findViewById(R.id.textView2) as TextView
@@ -70,15 +60,12 @@ class MainActivity : AppCompatActivity() {
 
         Toast.makeText(this, "New Game has begun, Goodluck!", Toast.LENGTH_SHORT).show()
 
-        guessWord('a',wordToGuess)
+        guessWord(wordToGuess)
 
         val restartGame_btn: Button = findViewById(R.id.restartGame)
         restartGame_btn.setOnClickListener() {
             startNewGame()
         }
-
-
-
 
 
     }
@@ -98,7 +85,6 @@ class MainActivity : AppCompatActivity() {
         healthOnScreen.text = life.toString()
     }
 
-
     fun spinWheel() {
         val wheel = NumberGenerator(2).roll()
 
@@ -113,7 +99,7 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    fun guessWord(letter: Char, wordToGuess: String) {
+    fun guessWord(wordToGuess: String) {
 
         val letterSubmitButton = findViewById<Button>(R.id.SubmitLetter_Button)
         val userInput = findViewById<EditText>(R.id.input_field)
@@ -121,6 +107,7 @@ class MainActivity : AppCompatActivity() {
 
         letterSubmitButton.setOnClickListener {
             val text = userInput.text.toString()
+            val letter = text[0]
 
             if (wordToGuess.contains(text, true)) {
                 Toast.makeText(this, "works!", Toast.LENGTH_SHORT).show()
@@ -129,8 +116,6 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-            val letter = text[0]
-
             val indexes = mutableListOf<Int>()
             wordToGuess.forEachIndexed { index, char ->
                 if (char.equals(letter, true)) {
@@ -138,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-            var finalUnderscoreWord = "" + underscoredWord // _ _ _ _ _ _ _ -> E _ _ _ _ _ _
+            var finalUnderscoreWord = "" + underscoredWord // Shows the letters, example; _ _ _ _ _ -> E _ _ _ _
             indexes.forEach { index ->
                 val sb = StringBuilder(finalUnderscoreWord).also { it.setCharAt(index, letter) }
                 finalUnderscoreWord = sb.toString()
@@ -146,9 +131,13 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (indexes.isEmpty()) {
-                life--
+                loseLife()
+
             }
             underscoredWord = finalUnderscoreWord
+
+            val wordsOnScreen = findViewById(R.id.textView2) as TextView
+            wordsOnScreen.text = underscoredWord
 
 
 
@@ -156,7 +145,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    // hides the letters with underscores.
     fun generateUnderscores(word: String) {
         val sb = StringBuilder()
         word.forEach { char ->
@@ -175,48 +164,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-    fun gameLogic() {
-        val secretPhrase = "Word Test"
-        var guesses = " " // the player's guesses
-
-        val wordsOnScreen = findViewById<TextView>(R.id.textView2)
-
-        val letterSubmitButton = findViewById<Button>(R.id.SubmitLetter_Button)
-        val userInput = findViewById<EditText>(R.id.input_field).toString()
-
-
-        letterSubmitButton.setOnClickListener{
-
-        var notDone = true
-        while (true) {
-            notDone = false
-            for (secretLetter in secretPhrase.toCharArray()) { // iterates over the letters/char in the array/String
-                if (guesses.indexOf(secretLetter) == -1) { //not one of the guesses
-
-                    val wordsOnScreen = findViewById(R.id.textView2) as TextView
-                    wordsOnScreen.text = "*"
-
-                    notDone = true
-                } else {
-                    print(secretLetter)
-                }
-            }
-            if (!notDone) {
-                break
-            }
-            //get user's guess
-            println("\nEnter your letter:")
-            val letter = userInput
-            guesses += letter
-        }
-        println("Congratulations!")
-
-        }
-
+    fun updateUI() {
+        // TODO
     }
-
-
 
 
 }
