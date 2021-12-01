@@ -2,7 +2,6 @@ package com.example.wheeloffortune
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -15,7 +14,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
        startNewGame()
-
 
         //Listens to when button is pressed and executes wheel spinning
         val rollButton: Button = findViewById(R.id.button)
@@ -30,32 +28,30 @@ class MainActivity : AppCompatActivity() {
 
     var life: Int = 5
     var pointsOnLine = 1 //startingpoint is 1, otherwise multiplication of occurred words will be multiplied by 0. 1 is subsequently subtracted in the pointsOnStake function
-    var point: Int = 0
-    private lateinit var underscoredWord: String    //Words to be underscared with the help of generateUnderscores function
+    var pointsEarned: Int = 0
+    private lateinit var underscoredWord: String    //Words to be underscored with the help of generateUnderscores function
     private lateinit var wordToGuess: String        //word to be randomly selected from text
+    var pointsOnStake = 0
 
 
 
     fun startNewGame() {
         life = 5
+        pointsEarned = 0
+
         val healthOnScreen = findViewById(R.id.healthBar_View) as TextView
         healthOnScreen.text = life.toString()
-        point = 0
-
 
 
         // picks a random word from GameWords list. generateUnderScores generates underscores of chosen word!!!! HUSK AT ÆNDRE TILBAGE TIL GameWOrds.words.random() og IKKE GameWords.testWords.random()
-        wordToGuess = GameWords.testWords.random()
+        wordToGuess = GameWords.words.random()
 
         //generates underscoredWord <-
         generateUnderscores(wordToGuess)
 
 
-
-
         val wordsOnScreen = findViewById(R.id.textView2) as TextView
         wordsOnScreen.text = underscoredWord
-        //wordsOnScreen.text = wordToGuess // midl! Brug ovenstående
 
 
         Toast.makeText(this, "New Game has begun, Goodluck!", Toast.LENGTH_SHORT).show()
@@ -90,15 +86,15 @@ class MainActivity : AppCompatActivity() {
 
         when (wheel) {
 
-            1 -> { gainLife() }
-            2 -> { loseLife() }
-            3 -> { pointsOnStake(100) }
-            3 -> { pointsOnStake(200) }
-            3 -> { pointsOnStake(500) }
-            3 -> { pointsOnStake(800) }
-            3 -> { pointsOnStake(1000) }
-            3 -> { pointsOnStake(1500) }
-            3 -> { pointsOnStake(2000) }
+            3 -> { gainLife()
+            }
+            2 -> { loseLife()
+            }
+            1 -> { pointsOnStake = 100
+                Toast.makeText(this, "$pointsOnStake is on stake!", Toast.LENGTH_SHORT).show()}
+            //4 -> { pointsEarned = 0
+            //   Toast.makeText(this, "You've went bankrupt!", Toast.LENGTH_SHORT).show() }
+
 
         }
     }
@@ -115,9 +111,6 @@ class MainActivity : AppCompatActivity() {
             val letter = userInput.text.toString()[0]
 
 
-
-
-
             val indexes = mutableListOf<Int>()
             wordToGuess.forEachIndexed { index, char ->
                 if (char.equals(letter, true)) {
@@ -129,8 +122,8 @@ class MainActivity : AppCompatActivity() {
             indexes.forEach { index ->
                 val sb = StringBuilder(finalUnderscoreWord).also { it.setCharAt(index, letter) }
                 finalUnderscoreWord = sb.toString()
-
             }
+
 
             if (indexes.isEmpty()) {
                 loseLife()
@@ -145,14 +138,18 @@ class MainActivity : AppCompatActivity() {
 
 
             // adds occurrences of correctly guessed letters onto 'point'. Framework used is an external library called Apache Commons(StringUtils)
-            point += StringUtils.countMatches(finalUnderscoreWord,letter).toInt() * pointsOnLine
-            Toast.makeText(this, point.toString(), Toast.LENGTH_SHORT).show()
+            pointsEarned += StringUtils.countMatches(finalUnderscoreWord,letter) * pointsOnStake
+            Toast.makeText(this, "You have earned $pointsEarned points", Toast.LENGTH_SHORT).show()
+
 
 
 
         }
-
+        pointsOnStake = 0
     }
+
+
+
 
     // hides the letters with underscores.
     fun generateUnderscores(word: String) {
@@ -171,21 +168,6 @@ class MainActivity : AppCompatActivity() {
     class NumberGenerator(val numberOfOptions: Int) {
         fun roll(): Int { return (1..numberOfOptions).random() }
     }
-
-
-    fun updateUI() {
-        // TODO
-    }
-
-
-
-    fun pointsOnStake(currentPoints: Int) {
-         pointsOnLine += currentPoints - 1
-
-       Toast.makeText(this, "this is on the line:$pointsOnLine", Toast.LENGTH_SHORT).show()
-    }
-
-
 
 
 
