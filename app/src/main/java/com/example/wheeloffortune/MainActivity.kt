@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-       startNewGame()
+
 
         //Listens to when button is pressed and executes wheel spinning
         val rollButton: Button = findViewById(R.id.button)
@@ -22,15 +22,21 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        val restartGame_btn: Button = findViewById(R.id.restartGame)
+        restartGame_btn.setOnClickListener() {
+            startNewGame()
+        }
+
     }
 
 
 
     var life: Int = 5
-    var pointsOnLine = 1 //startingpoint is 1, otherwise multiplication of occurred words will be multiplied by 0. 1 is subsequently subtracted in the pointsOnStake function
     var pointsEarned: Int = 0
     private lateinit var underscoredWord: String    //Words to be underscored with the help of generateUnderscores function
     private lateinit var wordToGuess: String        //word to be randomly selected from text
+    private var lettersUed: String = ""
+    var letter: Char = '\u0000'
     var pointsOnStake = 0
 
 
@@ -38,6 +44,8 @@ class MainActivity : AppCompatActivity() {
     fun startNewGame() {
         life = 5
         pointsEarned = 0
+        lettersUed = ""
+        pointsOnStake = 0
 
         val healthOnScreen = findViewById(R.id.healthBar_View) as TextView
         healthOnScreen.text = life.toString()
@@ -58,10 +66,6 @@ class MainActivity : AppCompatActivity() {
 
         guessWord(wordToGuess)
 
-        val restartGame_btn: Button = findViewById(R.id.restartGame)
-        restartGame_btn.setOnClickListener() {
-            startNewGame()
-        }
 
 
     }
@@ -108,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
         letterSubmitButton.setOnClickListener {
 
-            val letter = userInput.text.toString()[0]
+            letter = userInput.text.toString()[0]
 
 
             val indexes = mutableListOf<Int>()
@@ -136,10 +140,19 @@ class MainActivity : AppCompatActivity() {
 
 
 
+            if(underscoredWord.contains(finalUnderscoreWord) && !lettersUed.contains(letter)) {
 
-            // adds occurrences of correctly guessed letters onto 'point'. Framework used is an external library called Apache Commons(StringUtils)
-            pointsEarned += StringUtils.countMatches(finalUnderscoreWord,letter) * pointsOnStake
-            Toast.makeText(this, "You have earned $pointsEarned points", Toast.LENGTH_SHORT).show()
+                // adds occurrences of correctly guessed letters onto 'point'. Framework used is an external library called Apache Commons(StringUtils). Iterating through a loop would have worked too.
+                pointsEarned += StringUtils.countMatches(finalUnderscoreWord,letter) * pointsOnStake
+                Toast.makeText(this, "You have earned $pointsEarned points", Toast.LENGTH_SHORT).show()
+                lettersUed += letter
+            }
+
+            if(lettersUed.contains(letter)) {
+                Toast.makeText(this, "$lettersUed has now been used and can't be used again", Toast.LENGTH_SHORT).show()
+            }
+
+
 
 
 
@@ -147,6 +160,16 @@ class MainActivity : AppCompatActivity() {
         }
         pointsOnStake = 0
     }
+
+
+    fun gameWon() {
+        //TODO
+    }
+
+    fun gameLost() {
+        //TODO
+    }
+
 
 
 
@@ -168,7 +191,6 @@ class MainActivity : AppCompatActivity() {
     class NumberGenerator(val numberOfOptions: Int) {
         fun roll(): Int { return (1..numberOfOptions).random() }
     }
-
 
 
 }
