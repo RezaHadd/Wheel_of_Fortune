@@ -71,10 +71,13 @@ class PlayGameFrag : Fragment() {
         val healthOnScreen = view?.findViewById(R.id.healthBar_View) as TextView
         healthOnScreen.text = life.toString()
 
+        val pointsOnScreen = view?.findViewById(R.id.Points_View) as TextView
+        pointsOnScreen.text = pointsEarned.toString()
+
 
         // picks a random word from GameWords list. generateUnderScores generates underscores of chosen word!!!! HUSK AT ÆNDRE TILBAGE TIL GameWOrds.words.random() og IKKE GameWords.testWords.random()
-        //wordToGuess = GameWords.words.random()
-        wordToGuess = "test"
+        wordToGuess = GameWords.words.random()
+
 
 
         //generates underscoredWord <-
@@ -111,18 +114,28 @@ class PlayGameFrag : Fragment() {
     }
 
     fun spinWheel() {
-        val wheel = NumberGenerator(1).roll()
+        val wheel = NumberGenerator(9).roll()
 
         when (wheel) {
 
-            3 -> { gainLife()
+            1 -> { gainLife()
             }
             2 -> { loseLife()
             }
-            1 -> { pointsOnStake = 100
+            3 -> { pointsOnStake = 100
                 Toast.makeText(activity, "$pointsOnStake is on stake!", Toast.LENGTH_SHORT).show()}
-            //4 -> { pointsEarned = 0
-            //   Toast.makeText(this, "You've went bankrupt!", Toast.LENGTH_SHORT).show() }
+            4 -> { pointsOnStake = 200
+                Toast.makeText(activity, "$pointsOnStake is on stake!", Toast.LENGTH_SHORT).show()}
+            5 -> { pointsOnStake = 300
+                Toast.makeText(activity, "$pointsOnStake is on stake!", Toast.LENGTH_SHORT).show()}
+            6 -> { pointsOnStake = 500
+                Toast.makeText(activity, "$pointsOnStake is on stake!", Toast.LENGTH_SHORT).show()}
+            7 -> { pointsOnStake = 700
+                Toast.makeText(activity, "$pointsOnStake is on stake!", Toast.LENGTH_SHORT).show()}
+            8 -> { pointsOnStake = 1000
+                Toast.makeText(activity, "$pointsOnStake is on stake!", Toast.LENGTH_SHORT).show()}
+            9 -> { pointsEarned = 0
+                Toast.makeText(activity, "You've went bankrupt!", Toast.LENGTH_SHORT).show() }
 
 
         }
@@ -177,6 +190,9 @@ class PlayGameFrag : Fragment() {
                     pointsEarned += StringUtils.countMatches(finalUnderscoreWord,letter) * pointsOnStake
                     Toast.makeText(activity, "You have earned $pointsEarned points", Toast.LENGTH_SHORT).show()
                     lettersUed += letter
+
+                    val pointsOnScreen = view?.findViewById(R.id.Points_View) as TextView
+                    pointsOnScreen.text = pointsEarned.toString()
                 }
 
                 if(lettersUed.contains(letter)) {
@@ -210,6 +226,7 @@ class PlayGameFrag : Fragment() {
 
 
     // hides the letters with underscores.
+    // method inspired from https://www.youtube.com/watch?v=kGGpH7ypxAU
     fun generateUnderscores(word: String) {
         val sb = StringBuilder()
         word.forEach { char ->

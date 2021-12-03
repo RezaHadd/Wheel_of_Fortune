@@ -1,5 +1,6 @@
 package com.example.wheeloffortune
 
+// list of words taken from https://www.youtube.com/watch?v=kGGpH7ypxAU
 object GameWords {
     val words = listOf(
         "Afghanistan",

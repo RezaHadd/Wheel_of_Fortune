@@ -20,5 +20,21 @@
         android:layout_marginTop="300dp"
         />
 
+    <Button
+        android:id="@+id/listWordsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="302dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="220dp"
+        android:text="List of Words"
+        app:layout_constraintBottom_toTopOf="@+id/startGameBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.864"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

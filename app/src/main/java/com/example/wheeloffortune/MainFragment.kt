@@ -34,9 +34,14 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val starGameBtn: Button = view.findViewById(R.id.startGameBtn)
+        val wordListBtn: Button = view.findViewById(R.id.listWordsBtn)
 
         starGameBtn.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_playGameFrag)
+        }
+
+        wordListBtn.setOnClickListener {
+            Navigation.findNavController(view).navigate(R.id.action_mainFragment_to_recylerViewFrag)
         }
     }
 }
