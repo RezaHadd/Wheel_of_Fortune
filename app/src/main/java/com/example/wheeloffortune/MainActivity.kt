@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-
+/*
         //Listens to when button is pressed and executes wheel spinning
         val rollButton: Button = findViewById(R.id.button)
         rollButton.setOnClickListener {
@@ -26,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         restartGame_btn.setOnClickListener() {
             startNewGame()
         }
+ */
 
     }
 
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
     var letter: Char = '\u0000'
     var pointsOnStake = 0
 
-
+/*
 
     fun startNewGame() {
         life = 5
@@ -55,7 +56,7 @@ class MainActivity : AppCompatActivity() {
         wordToGuess = GameWords.words.random()
 
         //generates underscoredWord <-
-        generateUnderscores(wordToGuess)
+        generateUnderscores("Test")
 
 
         val wordsOnScreen = findViewById(R.id.textView2) as TextView
@@ -65,6 +66,8 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "New Game has begun, Goodluck!", Toast.LENGTH_SHORT).show()
 
         guessWord(wordToGuess)
+
+
 
 
 
@@ -111,6 +114,8 @@ class MainActivity : AppCompatActivity() {
 
 
         letterSubmitButton.setOnClickListener {
+
+
 
             letter = userInput.text.toString()[0]
 
@@ -191,6 +196,7 @@ class MainActivity : AppCompatActivity() {
         fun roll(): Int { return (1..numberOfOptions).random() }
     }
 
+*/
 
 }
 
